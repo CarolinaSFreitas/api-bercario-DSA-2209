@@ -1,3 +1,4 @@
+import { sequelize } from "../database/conecta.js"
 import { Bebe } from "../models/Bebe.js"
 import { Mae } from "../models/Mae.js"
 import { Medico } from "../models/Medico.js"
@@ -36,9 +37,10 @@ export async function bebeCreate(req, res) {
 //alterar algum dado do registro de bebê
 export async function bebeAlteraNome(req, res) {
     const { id } = req.params
+    const { nome } = req.body
 
     try {
-      await sequelize.query(`update bebes set nome = nome where id = {  id  }`) //altera o nome do bebe com o id 3 no tem where
+      await sequelize.query(`update bebes set nome = "${nome}" where id = ${id}`) //altera o nome do bebe com o id 3 no tem where
 
         res.status(200).json({msg: "Ok! Registro alterado com sucesso."})
     } catch (error) {

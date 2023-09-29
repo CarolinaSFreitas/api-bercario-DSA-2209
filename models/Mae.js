@@ -27,7 +27,7 @@ export const Mae = sequelize.define('mae', { // nome da tabela
     peso:{      // cria uma nova coluna na tabela
         type: DataTypes.DECIMAL(7, 3),
         allowNull: false,
-          // defaultValue: 60
+         // defaultValue: 60
     }
 }, {
     timestamps: false
