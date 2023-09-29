@@ -23,6 +23,11 @@ export const Mae = sequelize.define('mae', { // nome da tabela
     data_nasc: {
         type: DataTypes.DATE(),
         allowNull: false
+    },
+    peso:{      // cria uma nova coluna na tabela
+        type: DataTypes.DECIMAL(7, 3),
+        allowNull: false,
+          // defaultValue: 60
     }
 }, {
     timestamps: false

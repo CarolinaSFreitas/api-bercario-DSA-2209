@@ -20,13 +20,13 @@ async function conecta_db() {
     await sequelize.authenticate();
     console.log('Conexão bem sucedida.');
 
-    await Mae.sync()          //A MAE PRECISA CRIAR PRIMEIRO PQ ELA É A DONA DA FOREIGN KEY - vai ciar a tabela no banco(se nao existir já) e permitir alterações de campos 
+    await Mae.sync({ alter: true })          //A MAE PRECISA CRIAR PRIMEIRO PQ ELA É A DONA DA FOREIGN KEY - vai ciar a tabela no banco(se nao existir já) e permitir alterações de campos 
     console.log("Tabela de Mães: Ok!")
 
-    await Medico.sync()          //vai ciar a tabela no banco(se nao existir já) e permitir alterações de campos 
+    await Medico.sync({ alter: true })         //vai ciar a tabela no banco(se nao existir já) e permitir alterações de campos 
     console.log("Tabela de Médicos: Ok!")
 
-    await Bebe.sync()          //vai ciar a tabela no banco(se nao existir já) e permitir alterações de campos 
+    await Bebe.sync({ alter: true })         //vai ciar a tabela no banco(se nao existir já) e permitir alterações de campos 
     console.log("Tabela de Bebês: Ok!")
 
     await sequelize.authenticate();

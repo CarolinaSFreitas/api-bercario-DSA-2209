@@ -32,3 +32,16 @@ export async function bebeCreate(req, res) {
         res.status(400).send(error)
     }
 }
+
+//alterar algum dado do registro de bebê
+export async function bebeAlteraNome(req, res) {
+    const { id } = req.params
+
+    try {
+      await sequelize.query(`update bebes set nome = nome where id = {  id  }`) //altera o nome do bebe com o id 3 no tem where
+
+        res.status(200).json({msg: "Ok! Registro alterado com sucesso."})
+    } catch (error) {
+        res.status(400).send(error)
+    }
+}
