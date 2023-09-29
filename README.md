@@ -42,32 +42,50 @@ export const sequelize = new Sequelize('aula', 'aluno', 'senacrs', {
 
 ## ⚠️ Atenção: Em 'app.js'
 
-Deve-se criar primeiro a tabela que é dona da chave estrangeira, como nesse caso, **médico, bebê e mãe**
+Deve-se criar primeiro a tabela que é dona da chave estrangeira, como nesse caso, **mãe, médico e bebê**
 
-![image](https://github.com/CarolinaSFreitas/DSA-2209/assets/99994934/9260e37d-9ac4-4e0a-97f3-e9186c595143)
+![image](https://github.com/CarolinaSFreitas/api-bercario-DSA-2909/assets/99994934/4500bb07-7a6e-480c-8648-8f77f7dad0e3)
 
 ## 🔑 Chave Estrangeira - Para fazer o Relacionamento 1-N (um pra muitos)
 
-1. Após criar as tabelas em Models (Médico, Mãe, Bebê), fora da definição dos campos deve-se indicar na tabela que vai receber a chave estrangeira:
+1. Após criar as tabelas em Models (Médico, Mãe, Bebê), fora da definição dos campos deve-se indicar na tabela que vai receber a chave estrangeira (Bebê):
 
 ````
-Vinho.belongsTo(Marca, {
+// após construir a tabela do model, os relacionamentos são feitos fora, SOMENTE NO BEBE PQ É A TABELA QUE RECEBE AS FK:
+
+//relacionamento bebe-mãe
+Bebe.belongsTo(Mae, {
     foreignKey: {
-        name: "marca_id",
+        name: "mae_id",
         allowNull: false
     },
     onDelete: "RESTRICT",
     onUpdate: "CASCADE"
 })
 
-Marca.hasMany(Vinho, {
-    foreignKey: "marca_id"
+Mae.hasMany(Bebe, {
+    foreignKey: "mae_id"
+})
+
+//relacionamento bebê-médico
+Bebe.belongsTo(Medico, {
+    foreignKey: {
+        name: "medico_id",
+        allowNull: false
+    },
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
+})
+
+Medico.hasMany(Bebe, {
+    foreignKey: "medico_id"
 })
 ````
 
-Dessa forma ele importará a model 'Marca.js' e receberá a foreign key 
+Dessa forma ele importará as models 'Mãe.js' e 'Médico.js' e receberá as foreign keys
 
-![image](https://github.com/CarolinaSFreitas/DSA-2209/assets/99994934/3f3d3c10-3e58-4c35-841f-08f65bd8cd71)
+![image](https://github.com/CarolinaSFreitas/api-bercario-DSA-2909/assets/99994934/32880fd5-78f8-486d-b894-b1940d3e5c98)
+![image](https://github.com/CarolinaSFreitas/api-bercario-DSA-2909/assets/99994934/34cfc322-9541-4059-982d-8d368d2ba71c)
 
 ## 🕹️ Controllers e Routes 🛣️
 
@@ -75,15 +93,22 @@ Dessa forma ele importará a model 'Marca.js' e receberá a foreign key
 
 2. Em 'routes.js', deve-se criar rotas para cada controller, como da seguinte forma: 
 
-![image](https://github.com/CarolinaSFreitas/DSA-2209/assets/99994934/5fe2d46b-f6eb-4755-8439-c715a17efaca)
+![image](https://github.com/CarolinaSFreitas/api-bercario-DSA-2909/assets/99994934/90745d6a-97ed-4b23-9299-f1f868f48bcd)
 
 ## Pra listagem trazer os dados da tabela que tá como FK, deve-se adicionar a linha no controller das tabelas:
 
 + Em vinhoController:
 
 ````
+//função de get - vai listar os bebês no insomnia
+export async function bebesIndex(req, res) {
     try {
-        const vinhos = await Vinho.findAll({
-          include: Marca
+        const bebes = await Bebe.findAll({
+            include: [Mae, Medico], //aqui lista os bebês e já inclui a sua mãe e o médico
         })
+        res.status(200).json(bebes)
+    } catch (error) {
+        res.status(400).send(error)
+    }
+}
 ````
